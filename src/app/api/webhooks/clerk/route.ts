@@ -4,7 +4,7 @@ import { WebhookEvent } from '@clerk/nextjs/server';
 import prisma from '@/lib/Client';
 
 export async function POST(req: Request) {
-
+  console.log(123);
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 

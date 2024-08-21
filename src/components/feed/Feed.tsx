@@ -5,6 +5,7 @@ import prisma from "@/lib/Client";
 const Feed = async ({ username }: { username?: string; }) => {
 
     const { userId } = auth();
+    console.log({ userId });
     let posts: any[] = [];
 
     if (username) {

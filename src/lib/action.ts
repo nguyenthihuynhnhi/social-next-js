@@ -265,35 +265,40 @@ export const addCommentAction = async (postId: number, desc: string) => {
 
 export const addPostAction = async (formData: FormData, img: string) => {
 
-  const desc = formData.get("desc") as string;
-  const Desc = z.string().min(1).max(255);
-
-  const validatedDesc = Desc.safeParse(desc);
-
-  if (!validatedDesc.success) {
-    console.log("description is not valid");
-    return;
-  }
-
-  const { userId } = auth();
-
-  if (!userId) {
-    throw Error("User is not authenticated !!!");
-  }
-
   try {
+    const desc = formData.get("desc") as string;
+    const Desc = z.string().min(1).max(255);
+
+    const validatedDesc = Desc.safeParse(desc);
+
+    if (!validatedDesc.success) {
+      console.log("description is not valid");
+      return;
+    }
+
+    const { userId } = auth();
+
+    if (!userId) {
+      throw Error("User is not authenticated !!!");
+
+    }
+
+    console.log({ userId });
     const createPost = await prisma.post.create({
       data: {
         desc: validatedDesc.data,
         userId,
         img,
+        // user: {
+        //   connect: { id: userId }
+        // }
       }
     });
 
     revalidatePath("/");
   } catch (error) {
-    console.log("👙 🏊‍♀️  🏄‍♀️ 🌴 🌊  ~ error:", error);
-    throw Error("Something went wrong !!!");
+    console.log("add post error:", (error as Error).message);
+    throw Error((error as Error).message);
   }
 };
 
